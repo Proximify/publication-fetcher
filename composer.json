@@ -1,0 +1,23 @@
+{
+    "type": "uniweb-module",
+    "name": "proximify/h-index-reader",
+    "minimum-stability": "dev",
+    "require": {
+        "php": ">=7.1.0",
+        "proximify/foreign-packages": "^1.0"
+    },
+    "authors": [
+        {
+            "name": "Mert Metin",
+            "email": "mert@proximify.ca"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Proximify\\PublicationImporter\\": "src/"
+        }
+    },
+    "scripts": {
+     
+    }
+}

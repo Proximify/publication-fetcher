@@ -1,0 +1,232 @@
+<html>
+    <head>
+        <title>Publications Importer - Test</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.3/css/bootstrap.min.css">
+        <style>
+            #field-file-uploader, #field-text-area, #btn-pub-import {
+                display: none;
+            }
+
+            table {
+                font-family: arial, sans-serif;
+                border-collapse: collapse;
+                width: 100%;
+            }
+        
+            td,
+            th {
+                border: 1px solid #dddddd;
+                text-align: left;
+                padding: 8px;
+            }
+        
+            tr:nth-child(even) {
+                background-color: #dddddd;
+            }
+
+            .loader {
+                display: none;
+                text-align: center;
+                margin-top: 1rem;
+            }
+
+            .blink_me {
+                animation: blinker 1.5s linear infinite;
+            }
+
+            @keyframes blinker {  
+                50% { opacity: 0; }
+            }
+        </style>
+    </head>
+    <body>
+
+        <h3 class="text-center mb-3 mt-3">Publications Importer</h3>
+
+        <div class="container">
+            <h4>Select data source</h4>
+            <h5>Choose a source from which to load new references.</h5>
+
+        <div class="row pt-4">
+
+            <div class="col-3">
+                <div class="radio">
+                    <label><input type="radio" name="optradio" value="bibtex" checked> BibTex File </label>
+                </div>
+                <div class="radio">
+                    <label><input type="radio" name="optradio" value="gscholar"> Google Scholar </label>
+                </div>
+                <div class="radio">
+                    <label><input type="radio" name="optradio" value="endnotes"> EndNote File</label>
+                </div>
+                <!-- <div class="radio">
+                    <label><input type="radio" name="optradio" value="pubmed"> PubMed</label>
+                </div> -->
+                <div class="radio">
+                    <label><input type="radio" name="optradio" value="doi"> Digital Object Identifiers (DOI)</label>
+                </div>
+            </div>
+            <div class="col-8">
+                <div id="field-file-uploader">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="inputGroupFileAddon01">Upload</span>
+                        </div>
+                        <div class="custom-file">
+                            <input type="file" class="custom-file-input" id="inputGroupFile01" aria-describedby="inputGroupFileAddon01">
+                            <label class="custom-file-label" for="inputGroupFile01">Choose file</label>
+                        </div>
+                    </div>
+                </div>
+                <div id="field-text-area">
+                    <textarea rows="5" cols="50" type="text" class="span5" id="identifiers"></textarea>
+                </div>
+                <button id="btn-pub-import" class="btn btn-primary mt-3">Import</button>
+            </div>          
+        </div>
+        <button id="btn-next" class="btn btn-primary mt-3">Next</button>
+            <div id="result"></div>
+            <div id="test-loader" class="loader blink_me ">
+                <p>Fetching results...</p>
+            </div>
+        </div>
+    </body>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.0/axios.min.js"></script>
+    <script>
+        const onNextClicked = () => {
+            var selectedOption = document.querySelector('input[name="optradio"]:checked').value;
+
+            switch (selectedOption) {
+                case 'bibtex':
+                case 'gscholar':
+                case 'endnotes':
+                    document.getElementById('field-file-uploader').style.display = 'block';
+                    document.getElementById('field-text-area').style.display = 'none';
+                    break;
+                case 'pubmed':
+                case 'doi':
+                    document.getElementById('field-text-area').style.display = 'block';
+                    document.getElementById('field-file-uploader').style.display = 'none';
+            }
+
+            document.getElementById('btn-pub-import').style.display = 'block';
+        }
+
+
+        const onImportClicked = () => {
+            const selectedOption = document.
+                querySelector('input[name="optradio"]:checked').value;
+
+            if (selectedOption == 'doi')
+                importFromURL(selectedOption);
+            else
+                importFromFile(selectedOption);
+        }
+
+
+        const importFromURL = (type) => {
+            const formData = new FormData();
+            const textAreaVal = document.getElementById('identifiers').value;
+
+            if (!textAreaVal) {
+                alert('You have to put publication identifiers');
+                return;
+            }
+
+            formData.append('type', type);
+            formData.append('action', 'importFromURL');
+            formData.append('source', textAreaVal);
+
+            axios.post('api/index.php', formData).then((res) => {
+                document.getElementById("result").innerHTML = JSON.stringify(res.data);
+            }).catch((error) => {
+                console.log(error);
+            })
+        }
+
+        const importFromFile = (type) => {
+            const formData = new FormData();
+            const file = document.querySelector('#inputGroupFile01'); 
+
+            if (!file.files[0]) {
+                alert('You have to upload a file.');
+                return;
+            }
+
+            formData.append('action', 'importFromFile');
+            formData.append('source', file.files[0]);
+            formData.append('type', type);
+
+            axios.post('api/index.php', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            }).then((res) => {
+                document.getElementById("result").innerHTML = JSON.stringify(res.data);
+            }).catch((error) => {
+                console.log(error);
+            })
+        }
+
+        document.getElementById("btn-next").addEventListener("click", onNextClicked);
+        document.getElementById("btn-pub-import").addEventListener("click", onImportClicked);
+
+
+
+
+
+
+            // function importPublications() {
+            //     var selectedOption = document.
+            //         querySelector('input[name="optradio"]:checked').value;
+
+
+            //     if (selectedOption == 'doi')
+            //     {
+            //         importFromURL();
+            //     }
+            //     else
+            //     {
+            //         importFromFile(selectedOption);
+            //     }
+            // }
+
+            // function importFromURL() {
+            //     const textAreaVal = document.getElementById('identifiers');
+
+
+            //     axios.post('api/index.php', formData, {}).then((res) => {
+            //         document.getElementById("result").innerHTML = JSON.stringify(res.data);
+            //     }).catch((error) => {
+            //         console.log(error);
+            //     })
+            // }
+
+            // function importFromFile(type) {
+            //     var formData = new FormData();
+            //     var file = document.querySelector('#inputGroupFile01'); 
+
+            //     if (!file.files[0]) {
+            //         alert('You have to upload a file.');
+            //         return;
+            //     }
+
+            //     const file = document.querySelector('#inputGroupFile01'); 
+                
+            //     formData.append('source', file.files[0]);
+            //     formData.append('type', type);
+            //     formData.append('action', 'importPublications');
+
+            //     axios.post('api/index.php', formData, {
+            //         headers: {
+            //             'Content-Type': 'multipart/form-data'
+            //         }
+            //     }).then((res) => {
+            //         document.getElementById("result").innerHTML = JSON.stringify(res.data);
+            //     }).catch((error) => {
+            //         console.log(error);
+            //     })
+            // }
+
+    </script>
+</html>

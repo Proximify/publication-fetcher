@@ -1,0 +1,26 @@
+{
+    "name": "proximify/foreign-packages",
+    "description": "Install and update foreign package dependencies (NPM, Yarn, PIP, etc) when a composer project is installed or updated.",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Proximify Inc",
+            "email": "support@proximify.ca"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Proximify\\": "src"
+        }
+    },
+    "minimum-stability": "dev",
+    "require": {
+        "proximify/cli-actions": "dev-master"
+    },
+    "scripts": {
+        "post-install-cmd": "Proximify\\ForeignPackages::auto",
+        "post-update-cmd": "Proximify\\ForeignPackages::auto",
+        "post-create-project-cmd": "Proximify\\ForeignPackages::auto"
+    }
+}
