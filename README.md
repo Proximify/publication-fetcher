@@ -36,25 +36,25 @@ The publication-importer imports from bibtex, Google Scholar (bibtex) and endnod
 It also fetches publications from PubMed references (i.e. PubMed ids)
 
 <pre>
-print('Importing from Pubmed:');
-$type = 'pubmed';
-$sources = [28375682, 20813019];
+    print('Importing from Pubmed:');
+    $type = 'pubmed';
+    $sources = [28375682, 20813019];
 
-foreach ($sources as $source)
-{   
-    $res = $importer->importFromFile($type, $source);
-    print_r($res);
-}
+    foreach ($sources as $source)
+    {   
+        $res = $importer->importFromFile($type, $source);
+        print_r($res);
+    }
 </pre>
 
 and DOIs:
 
 <pre>
-print('Importing from DOI:');
-$type = 'doi';
-$source = 'DOI: 10.1177/0741713611402046 DOI:10.18653/v1/P17-1152';
-$res = $importer->importFromFile($type, $source);
-print_r($res);
+    print('Importing from DOI:');
+    $type = 'doi';
+    $source = 'DOI: 10.1177/0741713611402046 DOI:10.18653/v1/P17-1152';
+    $res = $importer->importFromFile($type, $source);
+    print_r($res);
 </pre>
 
 
