@@ -1,11 +1,11 @@
 # publication-importer
 
-## Introduction 
+publication-importer is a composer package that imports publication lists from multiple sources such as BibTex file, Google Scholar, EndNote file, PubMed identifers and DOIs.
 
-publication-importer is a module that allows you to retrieve publication from multiple sources such as BibTex file, Google Scholar, EndNote file, PubMed identifers and DOI's.
+- [Table of contents](docs/toc.md)
 
 ## Getting Started
-publications-importer both offers an API and a CLI to publications.
+publications-importer both offers an API and a CLI to import publications.
 
 ## Installation
 
@@ -52,7 +52,7 @@ You can also use the web interface for testing under the dev folder:
     cd publication-importer/dev/www && php -S localhost:8000
 </pre>
 
-Note: Please set the correct path for the autoloader.php under the dev/www/api/index.php. Otherwise, the test script will fail.
+**Note:** Please set the correct path for the autoloader.php under the dev/www/api/index.php. Otherwise, the test script will fail.
 
 
 ## Contributing
