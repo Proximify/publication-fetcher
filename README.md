@@ -33,7 +33,7 @@ The publication-importer imports from bibtex, Google Scholar (bibtex) and endnod
     print_r($res);
 </pre>
 
-It also fetches data PubMed references
+It also fetches publications PubMed references (i.e. PubMed ids)
 
 <pre>
 print('Importing from Pubmed:');
