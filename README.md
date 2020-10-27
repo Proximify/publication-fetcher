@@ -37,7 +37,7 @@ publication-importer offers a CLI, a web interface and a test suite for testing 
 
 CLI:
 <pre>
-composer import-pubs
+    composer import-pubs
 </pre>
 
 Test suite
@@ -49,7 +49,7 @@ Test suite
 You can also use the web interface for testing under the dev folder:
 
 <pre>
-cd publication-importer/dev/www && php -S localhost:8000
+    cd publication-importer/dev/www && php -S localhost:8000
 </pre>
 
 Note: Please set the correct path for the autoloader.php under the dev/www/api/index.php. Otherwise, the test script will fail.
