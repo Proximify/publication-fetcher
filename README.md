@@ -78,7 +78,7 @@ You can also use the web interface for testing under the dev folder:
     cd publication-importer/dev/www && php -S localhost:8000
 </pre>
 
-**Note:** Please set the correct path for the autoloader.php under the dev/www/api/index.php. Otherwise, the test script will fail.
+**Note:** Please set the correct path for the autoloader.php under the dev/www/api/index.php and dev/tests/Test.php. Otherwise, the test script will fail.
 
 
 ## Contributing
