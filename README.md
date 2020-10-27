@@ -5,7 +5,7 @@ publication-importer is a composer package that imports publication lists from m
 - [Table of contents](docs/toc.md)
 
 ## Getting Started
-publications-importer both offers an API and a CLI to import publications.
+publication-importer both offers an API and a CLI to import publications.
 
 ## Installation
 
