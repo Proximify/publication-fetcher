@@ -9,4 +9,3 @@
   * [Testing](#testing)
   * [Contributing](#contributing)
   * [License](#license)
-
