@@ -2,6 +2,9 @@
 
 namespace Proximify\PublicationImporter;
 
+use Proximify\PublicationImporter\EndNoteImport;
+use Proximify\PublicationImporter\PubMedImport;
+
 /** 
  *
  * @author Mert Metin <mert@proximify.ca>
@@ -31,9 +34,7 @@ class PublicationImporter {
 	const PATENT_SECTION = 'patents';
 	const JOURNAL_SECTION = 'journal_articles';
 	const CONFERENCE_SECTION = 'conference_publications';
-	const SECONDARY_AUTHORS = 'secondary_authors';
-
-
+    const SECONDARY_AUTHORS = 'secondary_authors';  
 
     /**
      * @var @options Component options.
@@ -96,8 +97,6 @@ class PublicationImporter {
 
         file_put_contents($source, $data);
         
-        error_log($source);
-
 		return $source;
 	}
 
@@ -116,15 +115,37 @@ class PublicationImporter {
 		}
 
         if ($doiList) {
-				$source = $this->fetchDOI($doiList);
-		}
-
-
-
-        $contents = ($type == 'mods') ? file_get_contents($source) :
-            self::convertFileToMods($source, $type);
+			$source = $this->fetchDOI($doiList);
+        }
+        
 
         $encoding = self::getFileCharset($source);
+        
+        $pubsInfo = [
+			'dataSource' => $type,
+			'failedImports' => [],
+			'notTheAuthor' => [],
+			'unauthoredPubs' => [],
+			'newPubs' => [],
+			'translationDictionary' => '',
+			'oldPubs' => []
+		];
+        
+        if ($type == 'pubmed')
+        {
+            $imp = new PubMedImport(30, $pubsInfo);
+            return $imp->importFromPubmed($source);
+        }
+        else {
+            $contents = ($type == 'mods') ? file_get_contents($source) :
+            self::convertFileToMods($source, $type);
+
+            if (is_null($contents) && $type == 'endnotes') {
+                $imp = new EndNoteImport(30, $pubsInfo);
+                $contents = $imp->importFromFile($source, $type, $encoding, false);
+            }
+        }
+
 
         return $this->processData($contents, $encoding);
     }
@@ -137,7 +158,7 @@ class PublicationImporter {
         $dom = new DOMWalker();
 
         if (!$dom->loadXMLFromString($data))
-            throw new Exception($this->dict->localStr(348));
+            throw new Exception('Unable to load the XML.');
 
         return $this->parseModsCollection($dom);
     }

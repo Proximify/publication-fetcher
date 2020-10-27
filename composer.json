@@ -4,7 +4,7 @@
     "minimum-stability": "dev",
     "require": {
         "php": ">=7.1.0",
-        "proximify/foreign-packages": "^1.0"
+        "proximify/cli-actions": "^1.0"
     },
     "authors": [
         {
@@ -18,6 +18,6 @@
         }
     },
     "scripts": {
-     
+        "import-pubs": "Proximify\\PublicationImporter\\PublicationImporterCLI::auto"
     }
 }

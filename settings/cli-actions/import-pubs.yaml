@@ -1,0 +1,15 @@
+class: Proximify\PublicationImporter\PublicationImporterCLI
+method: outputPublicationImport
+isStatic: false
+askConfirm: false
+arguments: {
+   "type": {
+        "options": ["bibtex", "gscholar", "endnotes", "pubmed", "doi"],
+        "prompt": "What is the source type",
+        "index": 0
+    },
+    "source": {
+        "prompt": "Source (Press enter to use default values)",
+        "index": 1
+    }
+}

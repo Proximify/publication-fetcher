@@ -9,6 +9,7 @@
 namespace Proximify\PublicationImporter;
 
 use \DOMDocument;
+use \DOMXpath;
 
 class DOMWalker extends DOMDocument
 {
