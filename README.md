@@ -31,9 +31,29 @@ or create a project:
     print_r($res);
 </pre>
 
-## CLI
 
+## Testing
+publication-importer offers a CLI, a web interface and a test suite for testing purposes.
+
+CLI:
+<pre>
 composer import-pubs
+</pre>
+
+Test suite
+
+<pre>
+    php dev/tests/Test.php
+</pre>
+
+You can also use the web interface for testing under the dev folder:
+
+<pre>
+cd publication-importer/dev/www && php -S localhost:8000
+</pre>
+
+Note: Please set the correct path for the autoloader.php under the dev/www/api/index.php. Otherwise, the test script will fail.
+
 
 ## Contributing
 This project welcomes contributions and suggestions. Most contributions require you to agree to a Contributor License Agreement (CLA) declaring that you have the right to and actually do, grant us the rights to use your contribution. For details, visit our Contributor License Agreement.

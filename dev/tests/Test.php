@@ -29,9 +29,14 @@ print_r($res);
 
 print('Importing from Pubmed:');
 $type = 'pubmed';
-$source = 28375682;
-$res = $importer->importFromFile($type, $source);
-print_r($res);
+$sources = [28375682, 20813019];
+
+foreach ($sources as $source)
+{   
+    $res = $importer->importFromFile($type, $source);
+    print_r($res);
+}
+
 
 print('Importing from DOI:');
 $type = 'doi';
