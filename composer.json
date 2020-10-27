@@ -1,6 +1,6 @@
 {
     "type": "uniweb-module",
-    "name": "proximify/h-index-reader",
+    "name": "proximify/publication-importer",
     "minimum-stability": "dev",
     "require": {
         "php": ">=7.1.0",
