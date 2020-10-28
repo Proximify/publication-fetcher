@@ -1,11 +1,10 @@
 <?php
 
-namespace Proximify\PublicationImporter;
+namespace Proximify\PublicationFetcher;
 
-use Proximify\PublicationImporter\EndNoteImport;
-use Proximify\PublicationImporter\PubMedImport;
-use Proximify\PublicationImporter\ModsImporter;
-use Symfony\Component\Yaml\Yaml;
+use Proximify\PublicationFetcher\EndNoteImport;
+use Proximify\PublicationFetcher\PubMedImport;
+use Proximify\PublicationFetcher\ModsImporter;
 use \Exception;
 
 /** 
@@ -16,12 +15,12 @@ use \Exception;
  * @version   1.0 UNIWeb Module
  */
 
-class PublicationImporter { 
+class PublicationFetcher { 
     const DEFAULT_LIBRARY = 'bibutils';
     const AVAILABLE_LIBRARIES = ['BibUtils'];
     const HASH_KEYS_PATH = __DIR__ . '/../settings/publicationHashKeys.yaml'; // was .ini before
 	const FIELD_MAP_PATH = __DIR__ . '/../settings/publicationFieldMap.yaml'; // was .ini before
-    const SETTINGS_FILE = '../settings/PublicationImporter.json';
+    const SETTINGS_FILE = '../settings/PublicationFetcher.json';
     const TITLE_KEY = 'TITLE_KEY';
 	const PUB_DATE_KEY = 'PUBDATE_KEY';
 	const UNDEFINED_SECTION = 'undefined';
@@ -180,6 +179,9 @@ class PublicationImporter {
 			$doiList = [];
         }
 
+        if ($type == 'gscholar')
+            $type = 'bibtex';
+
         // $this->loadPublicationAndIntelectualPropertyProfileData();
 
 
@@ -196,7 +198,7 @@ class PublicationImporter {
 			'oldPubs' => []
         ];
 
-        $this->sectionFieldMap = $this->loadSectionFieldMap($type);
+        // $this->sectionFieldMap = $this->loadSectionFieldMap($type);
         
 		switch ($type) {
 			case 'pubmed':
@@ -210,25 +212,10 @@ class PublicationImporter {
 				$pubsInfo = $this->importFromFile($source, $type, $pubsInfo, $checkAuthor);
 				$currentProgress = 30;
 				break;
-            case 'gscholar':
 			case 'bibtex':
-				if ($doiList) {
+				if ($doiList) 
 					$source = $this->fetchDOI($doiList);
-				} else {
-					try {
-                        $source = $source;
-
-						// $source = $this->getUploadedFilePath();
-					} catch (Exception $e) {
-                            // $rawInput = $this->getRequestParam('rawInput');
-
-                            // if (!$rawInput)
-                            // 	throw new Exception('Invalid empty file');
-
-                            // $source = $this->createSourceFile($rawInput);
-					}
-				}
-
+                
 				$pubsInfo = $this->importFromFile($source, $type, $pubsInfo, $checkAuthor);
 				$currentProgress = 30;
 
@@ -238,7 +225,7 @@ class PublicationImporter {
         }
         
 
-        $this->getOtherPubInfo($pubsInfo, $currentProgress, $duplicateCriteria);
+        // $this->getOtherPubInfo($pubsInfo, $currentProgress, $duplicateCriteria);
 
         return $pubsInfo;
 
@@ -255,7 +242,7 @@ class PublicationImporter {
         
 		// Try with the old method if we run into a problem
 		if (is_null($imported)) {
-			$imp = new EndNoteImport($this->modelParams(), $this->progress, $pubsInfo);
+			$imp = new EndNoteImport($this->progress, $pubsInfo);
 			$imported = $imp->importFromFile($path, $type, $encoding, $checkAuthor);
 		}
 
@@ -801,13 +788,13 @@ class PublicationImporter {
 
     function getHashKeys ()
     {
-        return Yaml::parseFile(self::HASH_KEYS_PATH);
+        // return Yaml::parseFile(self::HASH_KEYS_PATH);
     }
 
 
      function loadSectionFieldMap($type) 
      {
-        $fieldMap = Yaml::parseFile(self::FIELD_MAP_PATH);
+        // $fieldMap = Yaml::parseFile(self::FIELD_MAP_PATH);
         $keys = $this->getHashKeys();
 
         	// Get the UNIWeb field names

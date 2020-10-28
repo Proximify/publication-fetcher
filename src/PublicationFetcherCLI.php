@@ -1,15 +1,15 @@
 <?php
 
-namespace Proximify\PublicationImporter;
+namespace Proximify\PublicationFetcher;
 
-use Proximify\PublicationImporter\PublicationImporter;
+use Proximify\PublicationFetcher\PublicationFetcher;
 
 /**
  * 
  * Extend the base class in order to add an additional 
  * location for the settings folder.
  */
-class PublicationImporterCLI extends \Proximify\ForeignPackages
+class PublicationFetcherCLI extends \Proximify\ForeignPackages
 {
     const TEST_BIBTEX = __DIR__ . '/../dev/tests/assets/sample.bib';
     const TEST_GSCHOLAR = __DIR__ . '/../dev/tests/assets/sample.bib';
@@ -54,7 +54,7 @@ class PublicationImporterCLI extends \Proximify\ForeignPackages
             $source = $params['source'];
         }
 
-        $importer = new PublicationImporter();
+        $importer = new PublicationFetcher();
         print_r($importer->importPublications($type, $source));
     }
 

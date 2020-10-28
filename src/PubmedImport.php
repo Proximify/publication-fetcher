@@ -4,11 +4,11 @@
 // All Rights Reserved
 // UniWeb by Proximify is proprietary software.
 // ==========================================================================
-namespace Proximify\PublicationImporter;
+namespace Proximify\PublicationFetcher;
 
-use Proximify\PublicationImporter\PublicationSource;
-use Proximify\PublicationImporter\RemoteConnection;
-use Proximify\PublicationImporter\DomWalker;
+use Proximify\PublicationFetcher\PublicationSource;
+use Proximify\PublicationFetcher\RemoteConnection;
+use Proximify\PublicationFetcher\DomWalker;
 use \Exception;
 use \DOMElement;
 

@@ -5,7 +5,9 @@
 // UniWeb by Proximify is proprietary software.
 // ==========================================================================
 
-namespace Proximify\PublicationImporter;
+namespace Proximify\PublicationFetcher;
+
+use \Exception;
 
 /**
  * Connects to a remote server and fetches assets from it.

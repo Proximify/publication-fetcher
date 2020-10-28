@@ -10,7 +10,7 @@
  */
 require_once __DIR__ . '/../../../vendor/autoload.php';
 
-use Proximify\PublicationImporter;
+use Proximify\PublicationFetcher;
 
 $action = $_POST['action'];
 
@@ -30,8 +30,8 @@ echo json_encode($output);
 function importFromURL() {
     $type = $_POST['type'];
     $source = $_POST['source'];
-    $importer = new PublicationImporter\PublicationImporter();
-    $res =  $importer->importFromFile($type, $source);
+    $importer = new PublicationFetcher\PublicationFetcher();
+    $res =  $importer->importPublications($type, $source);
 
     return $res;
 }
@@ -39,8 +39,8 @@ function importFromURL() {
 function importFromFile() {
     $type = $_POST['type'];
     $source = $_FILES['source']['tmp_name'];
-    $importer = new PublicationImporter\PublicationImporter();
-    $res =  $importer->importFromFile($type, $source);
+    $importer = new PublicationFetcher\PublicationFetcher();
+    $res =  $importer->importPublications($type, $source);
 
     return $res;
 }

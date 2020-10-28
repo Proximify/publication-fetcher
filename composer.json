@@ -4,8 +4,7 @@
     "minimum-stability": "dev",
     "require": {
         "php": ">=7.1.0",
-        "proximify/foreign-packages": "^1.0",
-        "symfony/yaml": "5.x-dev"
+        "proximify/foreign-packages": "^1.0"
     },
     "authors": [
         {
@@ -15,11 +14,11 @@
     ],
     "autoload": {
         "psr-4": {
-            "Proximify\\PublicationImporter\\": "src/"
+            "Proximify\\PublicationFetcher\\": "src/"
         }
     },
     "scripts": {
-        "post-install-cmd": "Proximify\\PublicationImporter\\PublicationImporterCLI::auto",        
-        "import-pubs": "Proximify\\PublicationImporter\\PublicationImporterCLI::auto"
+        "post-install-cmd": "Proximify\\PublicationFetcher\\PublicationFetcherCLI::auto",        
+        "import-pubs": "Proximify\\PublicationFetcher\\PublicationFetcherCLI::auto"
     }
 }

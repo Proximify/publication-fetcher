@@ -1,6 +1,6 @@
 <?php
 
-namespace Proximify\PublicationImporter;
+namespace Proximify\PublicationFetcher;
 
 /**
  * File for class DependencyInstaller.

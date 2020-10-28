@@ -26,9 +26,9 @@ or create a project:
 The publication-fetcher imports from bibtex, Google Scholar (bibtex) and endnode files. Sample bibtex and endnodes files are available docs folder.
 
 <pre>
-    use Proximify\PublicationImporter\PublicationImporter;
+    use Proximify\PublicationFetcher\PublicationFetcher;
     
-    $importer = new PublicationImporter();
+    $importer = new PublicationFetcher();
     $type = 'bibtex';
     $source = 'PATH_TO_FILE;
     $res = $importer->importPublications($type, $source);
@@ -81,6 +81,13 @@ You can also use the web interface for testing under the dev folder:
 </pre>
 
 **Note:** Please set the correct path for the autoloader.php under the dev/www/api/index.php and dev/tests/Test.php. Otherwise, the test script will fail.
+
+
+## Known Issues
+Publication fetcher component was created by using UNIWeb's publication importing system which includes features like reference deduplication. Deduplication process involves ignoring references already in user's CV. Features like this requires direct access to the database which is not supported by this component yet.
+
+## Future Work
+A possible future work would be creating another component (i.e. publication importer) which both employs publication fetcher and deduplicater components to prevent importing references that currently exists in database.
 
 
 ## Contributing

@@ -2,9 +2,9 @@
 
 require_once('../../vendor/autoload.php');
 
-use Proximify\PublicationImporter\PublicationImporter;
+use Proximify\PublicationFetcher\PublicationFetcher;
 
-$importer = new PublicationImporter();
+$importer = new PublicationFetcher();
 
 print('Running tests...');
 

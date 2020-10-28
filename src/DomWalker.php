@@ -6,7 +6,7 @@
 // ==========================================================================
 // require_once('debug_utils.php');
 
-namespace Proximify\PublicationImporter;
+namespace Proximify\PublicationFetcher;
 
 use \DOMDocument;
 use \DOMXpath;

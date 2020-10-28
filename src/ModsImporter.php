@@ -4,10 +4,11 @@
 // All Rights Reserved
 // UniWeb by Proximify is proprietary software.
 // ==========================================================================
-namespace Proximify\PublicationImporter;
+namespace Proximify\PublicationFetcher;
 
-use Proximify\PublicationImporter\DOMWalker;
-use Proximify\PublicationImporter\PublicationSource;
+use Proximify\PublicationFetcher\DOMWalker;
+use Proximify\PublicationFetcher\PublicationSource;
+use \Exception;
 
 /**
  * See http://www.loc.gov/standards/mods/mods-outline-3-7.htm

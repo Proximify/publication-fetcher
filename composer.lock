@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "167e47e5d908dff30d2fb47cabf993b4",
+    "content-hash": "af81e758c159638e8fc31afdcb256847",
     "packages": [
         {
             "name": "proximify/cli-actions",
@@ -254,9 +254,7 @@
     "packages-dev": [],
     "aliases": [],
     "minimum-stability": "dev",
-    "stability-flags": {
-        "symfony/yaml": 20
-    },
+    "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {

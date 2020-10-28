@@ -1,4 +1,4 @@
-class: Proximify\PublicationImporter\PublicationImporterCLI
+class: Proximify\PublicationFetcher\PublicationFetcherCLI
 method: outputPublicationImport
 isStatic: false
 askConfirm: false
