@@ -1,29 +1,29 @@
-# publication-importer
+# publication-fetcher
 
-publication-importer is a composer package that imports publication lists from multiple sources such as BibTex file, Google Scholar, EndNote file, PubMed identifers and DOIs.
+publication-fetcher is a composer package that imports publication lists from multiple sources such as BibTex file, Google Scholar, EndNote file, PubMed identifers and DOIs.
 
 - [Table of contents](docs/toc.md)
 
 ## Getting Started
-publication-importer both offers an API and a CLI to import publications.
+publication-fetcher both offers an API and a CLI to import publications.
 
 ## Installation
 
 <pre>
-    composer require proximify/publication-importer
+    composer require proximify/publication-fetcher
 </pre>
 
 or create a project:
 
 <pre>
-    composer create-project proximify/publication-importer
+    composer create-project proximify/publication-fetcher
 </pre>
 
-**Note:** If you install publication-importer as dependency (i.e. installing with the require option), you have to create the binary files manually. To do that, go to C folder under src and run "make" command.
+**Note:** If you install publication-fetcher as dependency (i.e. installing with the require option), you have to create the binary files manually. To do that, go to C folder under src and run "make" command.
 
 ## API
 
-The publication-importer imports from bibtex, Google Scholar (bibtex) and endnode files. Sample bibtex and endnodes files are available docs folder.
+The publication-fetcher imports from bibtex, Google Scholar (bibtex) and endnode files. Sample bibtex and endnodes files are available docs folder.
 
 <pre>
     use Proximify\PublicationImporter\PublicationImporter;
@@ -61,7 +61,7 @@ and DOIs:
 
 
 ## Testing
-publication-importer offers a CLI, a web interface and a test suite for testing purposes.
+publication-fetcher offers a CLI, a web interface and a test suite for testing purposes.
 
 CLI:
 <pre>
@@ -95,4 +95,4 @@ Copyright (c) Proximify Inc. All rights reserved.
 
 Licensed under the MIT license.
 
-publication-importer is made by Proximify. We invite the community to participate.
+publication-fetcher is made by Proximify. We invite the community to participate.
