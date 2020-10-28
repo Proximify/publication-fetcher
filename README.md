@@ -31,7 +31,7 @@ The publication-importer imports from bibtex, Google Scholar (bibtex) and endnod
     $importer = new PublicationImporter();
     $type = 'bibtex';
     $source = 'PATH_TO_FILE;
-    $res = $importer->importFromFile($type, $source);
+    $res = $importer->importPublications($type, $source);
     print_r($res);
 </pre>
 
@@ -44,7 +44,7 @@ It also fetches publications from PubMed references (i.e. PubMed ids)
 
     foreach ($sources as $source)
     {   
-        $res = $importer->importFromFile($type, $source);
+        $res = $importer->importPublications($type, $source);
         print_r($res);
     }
 </pre>
@@ -55,7 +55,7 @@ and DOIs:
     print('Importing from DOI:');
     $type = 'doi';
     $source = 'DOI: 10.1177/0741713611402046 DOI:10.18653/v1/P17-1152';
-    $res = $importer->importFromFile($type, $source);
+    $res = $importer->importPublications($type, $source);
     print_r($res);
 </pre>
 
