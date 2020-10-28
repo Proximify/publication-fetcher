@@ -4,11 +4,11 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "1e4d4d7268e05461bbd91dcd1d5d8267",
+    "content-hash": "9755ebf9e015256159ccb5573e7fdc09",
     "packages": [
         {
             "name": "proximify/cli-actions",
-            "version": "1.0.4",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Proximify/cli-actions.git",
@@ -42,6 +42,42 @@
             ],
             "description": "Command-line interface (CLI) with custom actions and interactive prompts (e.g. composer app:action argument).",
             "time": "2020-10-18T02:31:50+00:00"
+        },
+        {
+            "name": "proximify/foreign-packages",
+            "version": "v1.0.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Proximify/foreign-packages.git",
+                "reference": "e14d70176c6a8c47af6bb8a2f04d0629d2240fba"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Proximify/foreign-packages/zipball/e14d70176c6a8c47af6bb8a2f04d0629d2240fba",
+                "reference": "e14d70176c6a8c47af6bb8a2f04d0629d2240fba",
+                "shasum": ""
+            },
+            "require": {
+                "proximify/cli-actions": "dev-master"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Proximify\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Proximify Inc",
+                    "email": "support@proximify.ca"
+                }
+            ],
+            "description": "Install and update foreign package dependencies (NPM, Yarn, PIP, etc) when a composer project is installed or updated.",
+            "time": "2020-10-18T02:45:18+00:00"
         },
         {
             "name": "symfony/deprecation-contracts",

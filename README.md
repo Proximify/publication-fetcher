@@ -19,6 +19,8 @@ or create a project:
     composer create-project proximify/publication-importer
 </pre>
 
+**Note:** If you install publication-importer as dependency (i.e. installing with the require option), you have to create the binary files manually. To do that, go to C folder under src and run "make" command.
+
 ## API
 
 The publication-importer imports from bibtex, Google Scholar (bibtex) and endnode files. Sample bibtex and endnodes files are available docs folder.
@@ -75,7 +77,7 @@ Test suite
 You can also use the web interface for testing under the dev folder:
 
 <pre>
-    cd publication-importer/dev/www && php -S localhost:8000
+    php -S localhost:8000 -t dev/www
 </pre>
 
 **Note:** Please set the correct path for the autoloader.php under the dev/www/api/index.php and dev/tests/Test.php. Otherwise, the test script will fail.

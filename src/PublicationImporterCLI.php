@@ -9,7 +9,7 @@ use Proximify\PublicationImporter\PublicationImporter;
  * Extend the base class in order to add an additional 
  * location for the settings folder.
  */
-class PublicationImporterCLI extends \Proximify\CLIActions
+class PublicationImporterCLI extends \Proximify\ForeignPackages
 {
     const TEST_BIBTEX = __DIR__ . '/../dev/tests/assets/sample.bib';
     const TEST_GSCHOLAR = __DIR__ . '/../dev/tests/assets/sample.bib';

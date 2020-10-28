@@ -480,7 +480,7 @@ class PublicationImporter {
         }
 
         $outFileName = self::createTempFile('bibtex');
-        $app = __DIR__ . '/../binaries/' . $binName;
+        $app = __DIR__ . '/c/bin/' . $binName;
         $cmd = "$app '{$source}' > '$outFileName'";
 
 

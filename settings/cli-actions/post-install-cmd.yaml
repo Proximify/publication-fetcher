@@ -1,0 +1,2 @@
+class: Proximify\PublicationImporter\DependencyInstaller
+method: checkDependencies
