@@ -1,2 +1,2 @@
-class: Proximify\PublicationFetcher\PublicationFetcherCLI
+class: Proximify\PublicationFetcher\DependencyInstaller
 method: checkDependencies
