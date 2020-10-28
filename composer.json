@@ -1,6 +1,6 @@
 {
     "type": "uniweb-module",
-    "name": "proximify/publication-importer",
+    "name": "proximify/publication-fetcher",
     "minimum-stability": "dev",
     "require": {
         "php": ">=7.1.0",
