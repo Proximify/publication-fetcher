@@ -4,6 +4,9 @@ namespace Proximify\PublicationImporter;
 
 use Proximify\PublicationImporter\EndNoteImport;
 use Proximify\PublicationImporter\PubMedImport;
+use Proximify\PublicationImporter\ModsImporter;
+use Symfony\Component\Yaml\Yaml;
+use \Exception;
 
 /** 
  *
@@ -13,12 +16,15 @@ use Proximify\PublicationImporter\PubMedImport;
  * @version   1.0 UNIWeb Module
  */
 
-use \Exception;
-
 class PublicationImporter { 
     const DEFAULT_LIBRARY = 'bibutils';
     const AVAILABLE_LIBRARIES = ['BibUtils'];
+    const HASH_KEYS_PATH = __DIR__ . '/../settings/publicationHashKeys.yaml'; // was .ini before
+	const FIELD_MAP_PATH = __DIR__ . '/../settings/publicationFieldMap.yaml'; // was .ini before
     const SETTINGS_FILE = '../settings/PublicationImporter.json';
+    const TITLE_KEY = 'TITLE_KEY';
+	const PUB_DATE_KEY = 'PUBDATE_KEY';
+	const UNDEFINED_SECTION = 'undefined';
 
     public $progress;
 
@@ -47,7 +53,7 @@ class PublicationImporter {
     */
     function __construct($options = []) 
     {
-
+        $this->options['lang'] = empty($this->options['lang']) ? 'en' : $options['lang'];
     }
 
     /**
@@ -59,6 +65,46 @@ class PublicationImporter {
     {
         return json_decode(file_get_contents(__DIR__ . '../' . self::SETTINGS_FILE), true);
     }
+
+    function getTranslationDict()
+    {
+        if ($this->options['lang'] == 'en')
+        {
+            $dict =  [
+                'date_issued' => 'Date issued',
+                'filing_date' => 'Filing date',
+                'date_of_end_term' => 'Date of end of term',
+            ];
+        }
+        else {
+            $dict =  [
+                'journal name' => 'Nom de la revue',
+                'volume' => 'Volume',
+                'issue' => 'Numéro',
+                'pages' => 'Pages',
+                'description' => 'Description',
+                'book title' => 'Titre de l\'ouvrage',
+                'abstract' => 'Résumé',
+                'conference name' => 'Nom de la conférence',
+                'publication date' => 'Date de publication',
+                'date_issued' => 'Date de délivrance',
+                'filing_date' => 'Date de dépôt',
+                'date_of_end_term' => 'Fin de la période de validité',
+                'patent office' => 'Office des brevets',
+                'patent number' => 'Numéro du brevet',
+                'publisher' => 'Éditeur',
+                'institution' => 'Établissement'
+            ];
+        }
+
+        return $dict;
+    }
+
+    public function sanitizeStringForComparison($string)
+	{
+		// Second arg adds a period to the default chars to trim
+		return strtolower(trim($string, ". \t\n\r\0\x0B"));
+	}
 
     function fetchDOI($doiList)
 	{
@@ -98,11 +144,31 @@ class PublicationImporter {
         file_put_contents($source, $data);
         
 		return $source;
-	}
+    }
 
-    function importFromFile($type, $source)
-    {
-		if ($type == 'doi') {
+    protected function duplicatePubs($indexKey)
+	{
+		// The pub data is hashed first by the length of the key, which is in turn
+		// made out of title, date and other parameters.
+		$len = strlen($indexKey);
+
+		// dbg_log($len);
+		// dbg_log($this->publicationsData);
+
+		if (isset($this->publicationsData[$len]) && isset($this->publicationsData[$len][$indexKey])) {
+			//'id' => $repeated,
+			$repeatedItem = $this->publicationsData[$len][$indexKey][0];
+
+			return [
+				'section' => $repeatedItem['section'],
+				'pubTitle' => ucfirst($repeatedItem['title'])
+			];
+		}
+	}
+    
+	function importPublications($type, $source, $checkAuthor = false, $deleteAfterImport = false)
+	{
+        if ($type == 'doi') {
 			// Change the type
 			$type = 'bibtex';
 
@@ -112,14 +178,13 @@ class PublicationImporter {
 			$doiList = array_filter(explode(' ', $source));
 		} else {
 			$doiList = [];
-		}
-
-        if ($doiList) {
-			$source = $this->fetchDOI($doiList);
         }
-        
 
-        $encoding = self::getFileCharset($source);
+        // $this->loadPublicationAndIntelectualPropertyProfileData();
+
+
+        $duplicateCriteria = $this->getDuplicateCriteria();
+
         
         $pubsInfo = [
 			'dataSource' => $type,
@@ -127,28 +192,201 @@ class PublicationImporter {
 			'notTheAuthor' => [],
 			'unauthoredPubs' => [],
 			'newPubs' => [],
-			'translationDictionary' => '',
+			'translationDictionary' => $this->getTranslationDict(),
 			'oldPubs' => []
-		];
+        ];
+
+        $this->sectionFieldMap = $this->loadSectionFieldMap($type);
         
-        if ($type == 'pubmed')
-        {
-            $imp = new PubMedImport(30, $pubsInfo);
-            return $imp->importFromPubmed($source);
+		switch ($type) {
+			case 'pubmed':
+				$imp = new PubMedImport($this->progress, $pubsInfo);
+				$pubsInfo = $imp->importFromPubmed($source);
+				$currentProgress = 80;
+				break;
+
+			case 'endnotes':
+				// $source = $this->getUploadedFilePath();
+				$pubsInfo = $this->importFromFile($source, $type, $pubsInfo, $checkAuthor);
+				$currentProgress = 30;
+				break;
+            case 'gscholar':
+			case 'bibtex':
+				if ($doiList) {
+					$source = $this->fetchDOI($doiList);
+				} else {
+					try {
+                        $source = $source;
+
+						// $source = $this->getUploadedFilePath();
+					} catch (Exception $e) {
+                            // $rawInput = $this->getRequestParam('rawInput');
+
+                            // if (!$rawInput)
+                            // 	throw new Exception('Invalid empty file');
+
+                            // $source = $this->createSourceFile($rawInput);
+					}
+				}
+
+				$pubsInfo = $this->importFromFile($source, $type, $pubsInfo, $checkAuthor);
+				$currentProgress = 30;
+
+                if ($deleteAfterImport)
+				    @unlink($source);
+				break;
         }
-        else {
-            $contents = ($type == 'mods') ? file_get_contents($source) :
-            self::convertFileToMods($source, $type);
+        
 
-            if (is_null($contents) && $type == 'endnotes') {
-                $imp = new EndNoteImport(30, $pubsInfo);
-                $contents = $imp->importFromFile($source, $type, $encoding, false);
-            }
-        }
+        $this->getOtherPubInfo($pubsInfo, $currentProgress, $duplicateCriteria);
 
+        return $pubsInfo;
 
-        return $this->processData($contents, $encoding);
     }
+
+    function importFromFile($path, $type, $pubsInfo, $checkAuthor)
+    {
+        $imp = new ModsImporter($this->progress, $pubsInfo);
+
+		$this->validateTextFile($path);
+		$encoding = self::getFileCharset($path);
+
+        $imported = $imp->importFromFile($path, $type, $encoding, $checkAuthor);
+        
+		// Try with the old method if we run into a problem
+		if (is_null($imported)) {
+			$imp = new EndNoteImport($this->modelParams(), $this->progress, $pubsInfo);
+			$imported = $imp->importFromFile($path, $type, $encoding, $checkAuthor);
+		}
+
+		return $imported ?? $pubsInfo;
+    }
+
+
+
+    private function getDuplicateCriteria()
+	{
+        $duplicateCriteria = empty($this->options['duplicateCriteria']) ? null
+             : $this->options['duplicateCriteria'];
+
+		if ($duplicateCriteria) {
+			if (is_string($duplicateCriteria))
+				$duplicateCriteria = explode(',', $duplicateCriteria);
+
+			if (is_array($duplicateCriteria)) {
+				//make sure no invalid keys are in the criteria array to prevent errors
+				$exceptions = array_diff($duplicateCriteria, array('year', 'month'));
+
+				if ($exceptions)
+					$duplicateCriteria = array_diff($duplicateCriteria, $exceptions);
+			}
+		}
+
+		return $duplicateCriteria;
+	}
+
+
+    public function getOtherPubInfo(&$pubsInfo, $currentProgress, $duplicateCriteria)
+	{
+		$progressDelta = (95 - $currentProgress) / max(count($pubsInfo['newPubs']), 1);
+
+		// Remove repeated pubs from new pubs
+		$repeatedPubs = $this->findRepeatedPublications(
+			$pubsInfo['newPubs'],
+			$duplicateCriteria,
+			$currentProgress,
+			$progressDelta
+        );   
+    }
+
+    public function getPubIndexKeyForSearch($publication, $duplicateCriteria)
+	{
+		$pubTitle = $this->findKeyValue($publication, self::TITLE_KEY);
+
+		if (!$pubTitle) {
+			// dbg_log("Cannot find title in pub data");
+			// dbg_log($publication);
+			return null;
+		}
+
+		$indexKey = $this->sanitizeStringForComparison($pubTitle);
+
+		if ($duplicateCriteria) {
+			$pubDate = $this->findKeyValue($publication, self::PUB_DATE_KEY);
+			$pubDate = $this->parseDateStringIntoDateHash($pubDate);
+
+			if ($pubDate) {
+				foreach ($duplicateCriteria as $criteria) {
+					if ($criteria == 'year' || $criteria == 'month' || $criteria == 'day')
+						$indexKey .= $pubDate[$criteria];
+				}
+			}
+		}
+		// dbg_log($indexKey);
+		return $indexKey;
+	}
+
+
+
+    function findRepeatedPublications(&$newpubs, $duplicateCriteria, $currentProgress, $progressDelta)
+	{
+		$repeatedPubs = [];
+		$pubs = [];
+
+		foreach ($newpubs as $publication) {
+			// $this->progress->update(
+			// 	$this->dict->localStr(149),
+			// 	$currentProgress,
+			// 	$currentProgress + $progressDelta
+			// );
+
+			$currentProgress += $progressDelta;
+
+			$repeatedItem = false;
+			$repeatedBy = '';
+
+			$indexKey = $this->getPubIndexKeyForSearch($publication, $duplicateCriteria);
+
+			$repeatedBy = $this->duplicatePubs($indexKey);
+
+			$belongsTo = $publication['belongs-to'] ?? self::UNDEFINED_SECTION;
+			$publication['belongs-to'] = $this->section_names_to_ids[$belongsTo] ?? 0;
+
+			if ($repeatedBy) {
+				// Add the publication to the array that is $repeatedBy from the 
+				// duplicatePubs function so that we will have all the publication data 
+				// to print later others:('section' => $belongsTo, 'pubTitle' => $publicationTitle)
+				$repeatedPubs[] = array_merge($repeatedBy, ['publication' => $publication]);
+			} else {
+				$pubs[] = $publication;
+			}
+		}
+
+		$newpubs = $pubs;
+
+		return $repeatedPubs;
+	}
+
+    private function findKeyValue($publication, $keyType)
+	{
+		$sectionName = $publication['belongs-to'] ?? self::UNDEFINED_SECTION;
+
+		$fieldMap = $this->sectionFieldMap[$sectionName] ?? [];
+
+		$srcKeys = $fieldMap[$keyType] ?? []; // either self::TITLE_KEY or self::PUB_DATE_KEY
+		$value = '';
+
+		if (!$srcKeys)
+			print("WARNING: There are no keys for section '$sectionName'!!!!");
+
+		// Find the first known title key with a value
+		foreach ($srcKeys as $srcKey) {
+			if ($value = $publication[$srcKey] ?? '')
+				break;
+		}
+
+		return $value;
+	}
 
     function processData($data, $encoding)
     {
@@ -559,4 +797,107 @@ class PublicationImporter {
 
         return '';
     }
+
+
+    function getHashKeys ()
+    {
+        return Yaml::parseFile(self::HASH_KEYS_PATH);
+    }
+
+
+     function loadSectionFieldMap($type) 
+     {
+        $fieldMap = Yaml::parseFile(self::FIELD_MAP_PATH);
+        $keys = $this->getHashKeys();
+
+        	// Get the UNIWeb field names
+		foreach ($this->getHashKeys() as $parentSection => $sections) {
+			foreach ($sections as $sectionName => $keys) {
+				$titleField = $keys[self::TITLE_KEY] ?? '';
+				$dateField = $keys[self::PUB_DATE_KEY] ?? '';
+
+				$fields = $fieldMap[$sectionName]['fields'] ?? [];
+				$titleKeys = [];
+				$dateKeys = [];
+
+				foreach ($fields as $refField => $uniField) {
+					if ($uniField == $titleField)
+						$titleKeys[] = $refField;
+
+					if ($uniField == $dateField)
+						$dateKeys[] = $refField;
+				}
+
+				if (!in_array('title', $titleKeys))
+					$titleKeys[] = 'title';
+
+				if (!in_array('date', $dateKeys))
+					$dateKeys[] = 'date';
+
+				if (!in_array('year-date', $dateKeys))
+					$dateKeys[] = 'year-date';
+
+				$fieldMap[$sectionName][self::TITLE_KEY] = $titleKeys;
+				$fieldMap[$sectionName][self::PUB_DATE_KEY] = $dateKeys;
+			}
+		}
+
+		// Add the "default" case so it's populated too
+		$fieldMap[self::UNDEFINED_SECTION][self::TITLE_KEY] = ['title'];
+		$fieldMap[self::UNDEFINED_SECTION][self::PUB_DATE_KEY] = ['date'];
+
+		return $fieldMap;
+     }
+
+
+    /**
+	 * Gets the temp path to the uploaded file. 
+	 */
+	function getUploadedFilePath($propertyName = null)
+	{
+		$fileInfo = $this->getUploadedFile($propertyName);
+
+		return $fileInfo['tmp_name'];
+	}
+
+    function getUploadedFile($propertyName = null)
+	{
+		if (!$propertyName)
+			$propertyName = 'user_file';
+
+		$fileInfo = array();
+
+		if (!isset($_FILES[$propertyName]))
+			throw new Exception('File upload error: No file is selected');
+
+		// Sometimes, a property of the file description might be an array, but
+		// it shouldn't, so we make it a regular value
+		foreach ($_FILES[$propertyName] as $key => $value)
+			$fileInfo[$key] = is_array($value) ? $value[0] : $value;
+
+		if ($fileInfo['error'] != UPLOAD_ERR_OK) {
+			switch ($fileInfo['error']) {
+				case c:
+				case UPLOAD_ERR_FORM_SIZE:
+					$msg = $this->dict->localStr(302);
+					break;
+				case UPLOAD_ERR_EXTENSION:
+					$msg = $this->dict->localStr(303);
+					break;
+				default:
+					$msg = $this->dict->localStr(304);
+					break;
+			}
+
+			throw new Exception($msg);
+		}
+
+		return $fileInfo;
+    }
+    
+	function validateTextFile($filename)
+	{
+		if (self::getFileCharset($filename) == 'binary')
+			throw new Exception($this->dict->localStr(348));
+	}
 }

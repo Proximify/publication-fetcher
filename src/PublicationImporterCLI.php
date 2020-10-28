@@ -55,7 +55,7 @@ class PublicationImporterCLI extends \Proximify\ForeignPackages
         }
 
         $importer = new PublicationImporter();
-        print_r($importer->importFromFile($type, $source));
+        print_r($importer->importPublications($type, $source));
     }
 
 }

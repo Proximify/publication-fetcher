@@ -1,0 +1,56 @@
+publications:
+    pubmed_articles:
+        TITLE_KEY: title
+        PUBDATE_KEY: publication_date
+    journal_articles:
+        TITLE_KEY: article_title
+        PUBDATE_KEY: date
+    journal_issues:
+        TITLE_KEY: issue_title
+        PUBDATE_KEY: date
+    books:
+        TITLE_KEY: book_title
+        PUBDATE_KEY: date
+    book_chapters:
+        TITLE_KEY: chapter_title
+        PUBDATE_KEY: date
+    dissertations:
+        TITLE_KEY: dissertation_title
+        PUBDATE_KEY: completion_date
+    encyclopedia_entries:
+        TITLE_KEY: entry_title
+        PUBDATE_KEY: date
+    dictionary_entries:
+        TITLE_KEY: entry_title
+        PUBDATE_KEY: date
+    reports:
+        TITLE_KEY: report_title
+        PUBDATE_KEY: date_submitted
+    working_papers:
+        TITLE_KEY: paper_title
+        PUBDATE_KEY: date_completed
+    manuals:
+        TITLE_KEY: manual_title
+        PUBDATE_KEY: date
+    online_resources:
+        TITLE_KEY: title
+        PUBDATE_KEY: date_posted_online
+    clinical_care_guidelines:
+        TITLE_KEY: title
+        PUBDATE_KEY: date_first_released
+    conference_publications:
+        TITLE_KEY: publication_title
+        PUBDATE_KEY: date
+    book_reviews:
+        TITLE_KEY: review_title
+        PUBDATE_KEY: date
+    newspaper_articles:
+        TITLE_KEY: article_title
+        PUBDATE_KEY: publication_date
+    magazine_entries:
+        TITLE_KEY: article_title
+        PUBDATE_KEY: date
+intellectual_property:
+    patents:
+        TITLE_KEY: patent_title
+        PUBDATE_KEY: date_issued

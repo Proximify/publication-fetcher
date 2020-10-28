@@ -1,0 +1,377 @@
+# Going from Reference fields to Uniweb CV fields
+
+undefined:
+  title: title
+  journal_title: journal
+  journal_volume: volume
+  journal_issue: issue
+  authors: authors
+  publication_date: pub_date
+  date: pub_date
+  year-date: pub_date
+  publisher: publisher
+  url: url
+  doi: doi
+journal_articles:
+  fields:
+    title: article_title
+    authors: authors
+    secondary_authors: editors
+    refereed: refereed
+    publisher: publisher
+    published: publishing_status
+    publication_date: date
+    year-date: date
+    date: date
+    edition: date
+    secondary-title: journal
+    secondary_title: journal
+    periodical-title: journal
+    volume: volume
+    number: issue
+    issue: issue
+    pages: page_range
+    journal_title: journal
+    journal_volume: volume
+    journal_issue: issue
+    pmid: pmid
+    url: url
+    doi: doi
+  attributes:
+    description: abstract
+    abstract: abstract
+journal_issues:
+  fields:
+    title: issue_title
+    authors: authors
+    refereed: refereed
+    publisher: publisher
+    published: publishing_status
+    publication_date: date
+    date: date
+    secondary_title: journal
+    year-date: date
+    secondary-title: journal
+    periodical-title: journal
+    volume: volume
+    edition: issue
+    issue: issue
+    pages: number_of_pages
+    journal_title: journal
+    journal_volume: volume
+    journal_issue: issue
+    url: url
+    doi: doi
+  attributes:
+    description: abstract
+    abstract: abstract
+books:
+  fields:
+    title: book_title
+    secondary-title: book_title
+    authors: authors
+    pages: number_of_pages
+    secondary_authors: editors
+    refereed: refereed
+    publisher: publisher
+    published: publishing_status
+    publication_date: date
+    journal_volume: volume
+    date: date
+    year-date: date
+    volume: volume
+    edition: edition
+    url: url
+    doi: doi
+  attributes:
+    abstract: abstract
+    description: abstract
+book_chapters:
+  fields:
+    publication_location: publication_city
+    title: chapter_title
+    'publication date': date
+    date: date
+    incollection: chapter_title
+    secondary-title: book_title
+    refereed: refereed
+    published: publishing_status
+    authors: authors
+    periodical-title: book_title
+    secondary_authors: editors
+    publisher: publisher
+    volume: volume
+    pages: page_range
+    journal_volume: volume
+    publication_date: date
+    year-date: date
+    url: url
+    doi: doi
+    edition: edition
+  attributes:
+    abstract: abstract
+    description: abstract
+book_reviews:
+  fields:
+    book: book_title
+    title: review_title
+    journal: published_in
+    refereed: refereed
+    published: publishing_status
+    'publication date': date
+    date: date
+    volume: volume
+    issue: issue
+    pages: page_range
+    publisher: publisher
+    url: url
+    doi: doi
+  attributes:
+    description: abstract
+dissertations:
+  fields:
+    title: dissertation_title
+    date: completion_date
+    year-date: completion_date
+    edition: completion_date
+    pages: number_of_pages
+    publication_date: completion_date
+    publisher: other_organization
+    institution: organization
+    url: url
+    doi: doi
+  attributes:
+    abstract: abstract
+    description: abstract
+encyclopedia_entries:
+  fields:
+    title: entry_title
+    authors: authors
+    secondary_authors: editors
+    publisher: publisher
+    published: publishing_status
+    date: date
+    secondary_title: encyclopedia_name
+    year-date: date
+    edition: date
+    secondary-title: encyclopedia_name
+    volume: volume
+    pages: page_range
+    url: url
+    doi: doi
+  attributes:
+    abstract: abstract
+dictionary_entries:
+  fields:
+    title: entry_title
+    authors: authors
+    secondary_authors: editors
+    publisher: publisher
+    published: publishing_status
+    date: date
+    secondary_title: dictionary_name
+    year-date: date
+    edition: date
+    secondary-title: dictionary_name
+    incollection: dictionary_name
+    volume: volume
+    pages: page_range
+    url: url
+    doi: doi
+  attributes:
+    abstract: abstract
+reports:
+  fields:
+    title: report_title
+    authors: authors
+    publication_date: date_completed
+    date: date_submitted
+    secondary_authors: editors
+    institution: other_organization
+    year-date: date_submitted
+    edition: date_submitted
+    pages: number_of_pages
+    url: url
+    doi: doi
+  attributes:
+    abstract: abstract
+    description: abstract
+working_papers:
+  fields:
+    title: paper_title
+    authors: authors
+    secondary_authors: editors
+    pages: number_of_pages
+    publication_date: date_completed
+    url: url
+    doi: doi
+  attributes:
+    abstract: abstract
+    description: abstract
+manuals:
+  fields:
+    title: manual_title
+    authors: authors
+    pages: number_of_pages
+    secondary_authors: editors
+    published: publishing_status
+    publication_date: date
+    journal_volume: volume
+    year-date: date
+    date: date
+    edition: edition
+    organization: publisher
+    volume: volume
+    url: url
+    doi: doi
+  attributes:
+    abstract: abstract
+    description: abstract
+online_resources:
+  fields:
+    title: title
+    authors: authors
+    publication_date: date_posted_online
+    secondary_authors: editors
+    date: date_posted_online
+    year-date: date_posted_online
+    edition: date_posted_online
+    url: url
+    doi: doi
+  attributes:
+    abstract: abstract
+    description: abstract
+clinical_care_guidelines:
+  fields:
+    title: title
+    authors: contributors
+    publication_date: date_first_released
+    date: date_first_released
+    year-date: date_first_released
+    edition: date_first_released
+    url: url
+    doi: doi
+  attributes:
+    abstract: abstract
+    description: abstract
+conference_publications:
+  fields:
+    con_pub_type: conference_publication_type
+    title: publication_title
+    refereed: refereed
+    publisher: publisher
+    published: publishing_status
+    secondary_title: conference_name
+    secondary-title: conference_name
+    authors: authors
+    secondary_authors: editors
+    date: date
+    year-date: date
+    edition: date
+    pages: page_range
+    url: url
+    doi: doi
+  attributes:
+    abstract: abstract
+newspaper_articles:
+  fields:
+    title: article_title
+    authors: authors
+    secondary_authors: editors
+    date: publication_date
+    secondary_title: journal
+    year-date: publication_date
+    secondary-title: journal
+    periodical-title: journal
+    volume: volume
+    edition: issue
+    issue: issue
+    pages: page_range
+    publisher: publisher
+    url: url
+    doi: doi
+  attributes:
+    abstract: abstract
+magazine_entries:
+  fields:
+    title: article_title
+    authors: authors
+    secondary_authors: editors
+    publisher: publisher
+    published: publishing_status
+    publication_date: date
+    date: date
+    secondary_title: journal
+    year-date: date
+    secondary-title: journal
+    periodical-title: journal
+    volume: volume
+    edition: issue
+    issue: issue
+    pages: page_range
+    url: url
+    doi: doi
+  attributes:
+    abstract: abstract
+patents:
+  fields:
+    title: patent_title
+    filing_date: filing_date
+    custom2: date_issued
+    date: date_issued
+    date_of_end_term: date_of_end_term
+    patent_location: patent_location
+    isbn: patent_number
+    url: url
+    doi: doi
+  attributes:
+    abstract: abstract
+    description: abstract
+generic_display:
+  fields:
+    title: title
+    publication_title: title
+    manual_title: title
+    paper_title: title
+    report_title: title
+    dissertation_title: title
+    chapter_title: title
+    issue_title: title
+    article_title: title
+    review_title: title
+    patent_title: title
+    entry_title: title
+    book_title: book_title
+    dictionary_name: book_title
+    encyclopedia_name: book_title
+    published_in: journal
+    journal: journal
+    authors: authors
+    contributors: authors
+    secondary_authors: editors
+    editors: editors
+    conference_name: conference_name
+    publication_date: pub_date
+    date: pub_date
+    date_first_released: pub_date
+    date_posted_online: pub_date
+    date_submitted: pub_date
+    date_completed: pub_date
+    completion_date: pub_date
+    date_issued: date_issued
+    filing_date: filing_date
+    date_of_end_term: date_of_end_term
+    patent_location: patent_location
+    patent_number: patent_number
+    publisher: publisher
+    page_range: pages
+    number_of_pages: pages
+    volume: volume
+    issue: issue
+    pmid: pmid
+    other_organization: other_organization
+    url: url
+    doi: doi
+  attributes:
+    abstract: abstract
+    description: abstract

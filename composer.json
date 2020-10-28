@@ -4,7 +4,8 @@
     "minimum-stability": "dev",
     "require": {
         "php": ">=7.1.0",
-        "proximify/foreign-packages": "^1.0"
+        "proximify/foreign-packages": "^1.0",
+        "symfony/yaml": "5.x-dev"
     },
     "authors": [
         {
